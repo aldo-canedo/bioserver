@@ -1,0 +1,110 @@
+<html>
+  <head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.2/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.2/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.2/addons/p5.sound.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <!-- <script src="sketch.js"></script> -->
+
+
+    <script>
+      let HOST = location.origin.replace(/^http/, 'ws')
+      let ws = new WebSocket(HOST);
+      let el;
+      let datos;
+
+      ws.onmessage = (event) => {
+        el = document.getElementById('server-time');
+        el.innerHTML = 'Datos recibidos: ' + event.data;
+        datos=event.data;
+      }; 
+      // document.getElementById("demo").addEventListener("click", myFunction);
+
+
+
+///////////////////////////////////////////////////////////////////
+
+
+var host = 'test-bio-socket.herokuapp.com';
+var socket; // the websocket
+var sensorValue = 0; // the sensor value
+let xvals = [];
+let yvals = [];
+let bvals = [];
+
+
+
+
+function setup() {
+  createCanvas(displayWidth, displayHeight);
+  // connect to server:
+  // socket = new WebSocket('wss://' + host);
+  // // socket connection listener:
+  // socket.onopen = sendIntro;
+  // // socket message listener:
+  // socket.onmessage = readMessage;
+}
+
+function draw() {
+  
+   background("#2307AF");
+  fill(255);
+  ellipse(sensorValue, height / 2, 20, 20);
+  text(sensorValue, 20, 20);
+  
+  
+  for (let i = 1; i < width; i++) {
+    xvals[i - 1] = xvals[i];
+    yvals[i - 1] = yvals[i];
+    bvals[i - 1] = bvals[i];
+  }
+  // Add the new values to the end of the array
+  xvals[width - 1] = datos;
+  yvals[width - 1] = mouseY;
+  
+    for (let i = 1; i < width; i++) {
+    stroke(255);
+    point(i, xvals[i] /2 );
+    stroke(0);
+    point(i, height / 3 + yvals[i] / 3);
+    stroke(255);
+   /* line(
+      i,
+      (2 * height) / 3 + bvals[i] / 3,
+      i,
+      (2 * height) / 3 + bvals[i - 1] / 3
+    );*/
+    }
+
+
+}
+
+// function sendIntro() {
+//   // convert the message object to a string and send it:
+//   socket.send("Hello");
+// }
+
+// function readMessage(event) {
+//   var msg = event.data; // read data from the onmessage event
+//   sensorValue = Number(msg) / 4;
+//  // println(sensorValue); // print it
+// }
+
+
+
+
+
+
+
+
+
+
+    </script> 
+  </head>
+  <body id="pantalla">
+    
+    <p id="demo">Hello Freak!</p>
+    <p id="server-time"></p>
+  </body>
+</html>
